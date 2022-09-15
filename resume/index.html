@@ -1,13 +1,15 @@
-<!DOCTYPE html><html lang="ru" class="astro-KYBJ72BT">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <link rel="icon" href="/favicon.svg">
-    <title>Resume | Robert Kuzhin</title>
-  <link rel="stylesheet" href="/assets/404-index-resume.b5ed9695.css" />
-<link rel="stylesheet" href="/assets/resume.4796277f.css" /></head>
-  <body class="astro-KYBJ72BT">
-    <main class="astro-KYBJ72BT">
+<!DOCTYPE html><html lang="ru" class="astro-SXKAV57R">
+  <meta charset="UTF-8">
+<meta name="description" property="og:description" content="The personal site of Robert Kuzhin">
+<meta name="viewport" content="width=device-width">
+<meta name="generator" content="Astro v1.2.2">
+<title>Resume | Robert Kuzhin</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+
+  <link rel="stylesheet" href="/assets/404-index-resume.9f8173b2.css" />
+<link rel="stylesheet" href="/assets/resume.1101ce70.css" /><body class="astro-SXKAV57R">
+    <main class="prose md:prose-lg lg:prose-base dark:prose-invert astro-SXKAV57R">
       <h1 id="кужин-роберт">Кужин Роберт</h1>
 <blockquote>
 <p>Я Front-end developer, занимаюсь этим год, самоучка. Без коммерческого опыта. Люблю open source. Соблюдаю conventional commit, использую линтеры, пишу тесты. Постепенно изучаю DevOps.</p>
@@ -31,14 +33,14 @@
 </ul>
 <hr>
 <h2 id="-мои-работы"><strong>👩🏻‍💻</strong> Мои работы</h2>
-<p>✨<a href="https://kanban-ae4a8.web.app/login">Mirio</a> - приложение для контроля цикла выполнения задач и планирования</p>
+<p>✨ <a href="https://kanban-ae4a8.web.app/login">Mirio</a> - приложение для планирования и контроля цикла выполнения задач</p>
 <p>Реализовал drag and drop задачи с контролем жизненного цикла c поддержкой авто-скроллинга, и мобильной версией. Создание изолированных проектов для каждого пользователя с возможностью добавлять новые проекты и менять их информацию.</p>
 <p>Настроил сборку проекта, с CI/CD. Технологии которые я использовал можно посмотреть в <a href="https://github.com/raidenmiro/kanban">README</a>.</p>
-<p>🧭<a href="https://github.com/raidenmiro/redux-reflect">Redux-reflect</a> - библиотека для привязки состояния к компоненту</p>
+<p>🧭 <a href="https://github.com/raidenmiro/redux-reflect">Redux-reflect</a> - библиотека для привязки состояния к компоненту</p>
 <p>С помощью библиотеки возможны создания декларативных компонентов со своим состоянием. Это поможет избавиться от лишних рендеров без ненужной мемоизации. Доступно множество жизненных циклов для компонента.</p>
-<p>🚀<a href="https://github.com/raidenmiro/effector-controls">Effector-controls</a> - создавайте декларативные и гибкие формы без бойлерплейта</p>
+<p>🚀 <a href="https://github.com/raidenmiro/effector-controls">Effector-controls</a> - создавайте декларативные и гибкие формы без бойлерплейта</p>
 <p>Реализовал возможность создавать полей с кастомной валидацией и в дальнейшим можно собрать поля в единую форму.  Допускается использовать библиотеки со схемами, например zod, joi, yup, как в react-hook-form.</p>
-<p>💥<a href="https://frontend-test-task-table.vercel.app/">Infinity-table</a> - Таблица с бесконечным скроллом</p>
+<p>💥 <a href="https://frontend-test-task-table.vercel.app/">Infinity-table</a> - Таблица с бесконечным скроллом</p>
 <p>Настроил docker-compose для запуска приложения с помощью одной команды, nginx для раздачи статики. Покрыл тестами бизнес логику и ui. В <a href="https://github.com/raidenmiro/frontend-test-task-table">REAME</a> находится детальное описание проекта и используемые технологии.</p>
 <p>Так же интересуюсь <a href="https://github.com/effector/effector">effector</a>. Вы можете просмотреть все мои проекты в моем <a href="https://github.com/raidenmiro">github</a>.</p>
 <hr>
@@ -48,8 +50,89 @@
 <li><em>2022 Информационные системы и программирование</em></li>
 </ul>
     </main>
-    
+    <script>
+      const removeClasses = (node) => {
+        const classes = ['light', 'dark']
+        return classes.forEach((className) => node.classList.remove(className))
+      }
 
+      const adapter = ({
+        storage,
+        serialize = JSON.stringify,
+        deserialize = JSON.parse,
+      }) => {
+        return {
+          get(key) {
+            const value = storageSupport() ? storage.getItem(key) : null
+            const valueExist = value != null
+
+            return valueExist ? deserialize(value) : null
+          },
+          set(key, value) {
+            const storageEstablish = storageSupport()
+
+            if (storageEstablish) {
+              storage.setItem(key, serialize(value))
+            }
+          },
+        }
+      }
+
+      const storageSupport = () => typeof window.localStorage !== 'undefined'
+
+      const storage = adapter({ storage: localStorage })
+
+      const config = {
+        key: 'current-theme',
+        darkMedia: '(prefers-color-scheme: dark)',
+      }
+
+      const toggleTheme = () => {
+        const prevTheme = storage.get<Theme>(config.key)
+
+        if (prevTheme) saveCurrentTheme(prevTheme === 'dark' ? 'light' : 'dark')
+      }
+
+      const saveCurrentTheme = (theme) => {
+        const html = document.querySelector('html')
+
+        if (html) {
+          removeClasses(html)
+          html.classList.add(theme)
+        }
+
+        storage.set(config.key, theme)
+      }
+
+      const extractPreference = () => {
+        const isDark = window.matchMedia(config.darkMedia).matches
+
+        return {
+          theme: isDark ? 'dark' : 'light',
+        }
+      }
+
+      const subscribeTheme = () => {
+        window.matchMedia(config.darkMedia).addListener((evt) => {
+          const theme = evt.matches ? 'dark' : 'light'
+
+          saveCurrentTheme(theme)
+        })
+      }
+
+      const loadCurrentTheme = () => {
+        const preference = extractPreference()
+        const themeFromStorage = storage.get(config.key)
+
+        if (!themeFromStorage) saveCurrentTheme(preference.theme)
+        else saveCurrentTheme(themeFromStorage)
+      }
+
+      if (typeof window !== 'undefined') {
+        subscribeTheme()
+        loadCurrentTheme()
+      }
+    </script>
     
   </body>
 </html>
