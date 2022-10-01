@@ -1,15 +1,101 @@
-<!DOCTYPE html><html lang="ru" class="astro-SXKAV57R">
-  <meta charset="UTF-8">
-<meta name="description" property="og:description" content="The personal site of Robert Kuzhin">
-<meta name="viewport" content="width=device-width">
-<meta name="generator" content="Astro v1.2.2">
-<title>Resume | Robert Kuzhin</title>
+<!DOCTYPE html><html lang="ru">
+  <!-- setup theme --><script>
+  const removeClasses = (node) => {
+    const classes = ['light', 'dark']
+    return classes.forEach((className) => node.classList.remove(className))
+  }
+
+  const adapter = ({
+    storage,
+    serialize = JSON.stringify,
+    deserialize = JSON.parse,
+  }) => {
+    return {
+      get(key) {
+        const value = storageSupport() ? storage.getItem(key) : null
+        const valueExist = value != null
+
+        return valueExist ? deserialize(value) : null
+      },
+      set(key, value) {
+        const storageEstablish = storageSupport()
+
+        if (storageEstablish) {
+          storage.setItem(key, serialize(value))
+        }
+      },
+    }
+  }
+
+  const storageSupport = () => typeof window.localStorage !== 'undefined'
+
+  const storage = adapter({ storage: localStorage })
+
+  const config = {
+    key: 'current-theme',
+    darkMedia: '(prefers-color-scheme: dark)',
+  }
+
+  const saveCurrentTheme = (theme) => {
+    const html = document.querySelector('html')
+
+    if (html) {
+      removeClasses(html)
+      html.classList.add(theme)
+    }
+
+    storage.set(config.key, theme)
+  }
+
+  const extractPreference = () => {
+    const isDark = window.matchMedia(config.darkMedia).matches
+
+    return {
+      theme: isDark ? 'dark' : 'light',
+    }
+  }
+
+  const subscribeTheme = () => {
+    window.matchMedia(config.darkMedia).addListener((evt) => {
+      const theme = evt.matches ? 'dark' : 'light'
+
+      saveCurrentTheme(theme)
+    })
+  }
+
+  const loadCurrentTheme = () => {
+    const preference = extractPreference()
+    const themeFromStorage = storage.get(config.key)
+
+    if (!themeFromStorage) saveCurrentTheme(preference.theme)
+    else saveCurrentTheme(themeFromStorage)
+  }
+
+  if (typeof window !== 'undefined') {
+    subscribeTheme()
+    loadCurrentTheme()
+  }
+</script>
+
+<!-- global meta-data -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="generator" content="Astro v1.2.2">
+
+<!-- primary meta-tags -->
+<title>Resume | Robert Kuzhin</title>
+<meta name="description" content="The personal site of Robert Kuzhin">
+<meta name="viewport" content="width=device-width">
+
+<!-- scroll-style -->
 
 
-  <link rel="stylesheet" href="/raiden.me/assets/404-index-resume.9f8173b2.css" />
-<link rel="stylesheet" href="/raiden.me/assets/resume.1101ce70.css" /><body class="astro-SXKAV57R">
-    <main class="prose md:prose-lg lg:prose-base dark:prose-invert astro-SXKAV57R">
+  
+  <link rel="stylesheet" href="/raiden.me/assets/404-index-resume.3fab46db.css" />
+<link rel="stylesheet" href="/raiden.me/assets/404-resume.dd2c8c84.css" />
+<link rel="stylesheet" href="/raiden.me/assets/resume.2a6cf73e.css" /><body>
+    <main class="prose md:prose-lg lg:prose-base dark:prose-invert">
       <h1 id="кужин-роберт">Кужин Роберт</h1>
 <blockquote>
 <p>Я Front-end developer, занимаюсь этим год, самоучка. Без коммерческого опыта. Люблю open source. Соблюдаю conventional commit, использую линтеры, пишу тесты. Постепенно изучаю DevOps.</p>
@@ -50,89 +136,4 @@
 <li><em>2022 Информационные системы и программирование</em></li>
 </ul>
     </main>
-    <script>
-      const removeClasses = (node) => {
-        const classes = ['light', 'dark']
-        return classes.forEach((className) => node.classList.remove(className))
-      }
-
-      const adapter = ({
-        storage,
-        serialize = JSON.stringify,
-        deserialize = JSON.parse,
-      }) => {
-        return {
-          get(key) {
-            const value = storageSupport() ? storage.getItem(key) : null
-            const valueExist = value != null
-
-            return valueExist ? deserialize(value) : null
-          },
-          set(key, value) {
-            const storageEstablish = storageSupport()
-
-            if (storageEstablish) {
-              storage.setItem(key, serialize(value))
-            }
-          },
-        }
-      }
-
-      const storageSupport = () => typeof window.localStorage !== 'undefined'
-
-      const storage = adapter({ storage: localStorage })
-
-      const config = {
-        key: 'current-theme',
-        darkMedia: '(prefers-color-scheme: dark)',
-      }
-
-      const toggleTheme = () => {
-        const prevTheme = storage.get<Theme>(config.key)
-
-        if (prevTheme) saveCurrentTheme(prevTheme === 'dark' ? 'light' : 'dark')
-      }
-
-      const saveCurrentTheme = (theme) => {
-        const html = document.querySelector('html')
-
-        if (html) {
-          removeClasses(html)
-          html.classList.add(theme)
-        }
-
-        storage.set(config.key, theme)
-      }
-
-      const extractPreference = () => {
-        const isDark = window.matchMedia(config.darkMedia).matches
-
-        return {
-          theme: isDark ? 'dark' : 'light',
-        }
-      }
-
-      const subscribeTheme = () => {
-        window.matchMedia(config.darkMedia).addListener((evt) => {
-          const theme = evt.matches ? 'dark' : 'light'
-
-          saveCurrentTheme(theme)
-        })
-      }
-
-      const loadCurrentTheme = () => {
-        const preference = extractPreference()
-        const themeFromStorage = storage.get(config.key)
-
-        if (!themeFromStorage) saveCurrentTheme(preference.theme)
-        else saveCurrentTheme(themeFromStorage)
-      }
-
-      if (typeof window !== 'undefined') {
-        subscribeTheme()
-        loadCurrentTheme()
-      }
-    </script>
-    
-  </body>
-</html>
+  </body></html>

@@ -1,12 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-<meta name="description" property="og:description" content="The personal site of Robert Kuzhin">
-<meta name="viewport" content="width=device-width">
-<meta name="generator" content="Astro v1.2.2">
-<title>Not Found | Robert Kuzhin</title>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <!-- setup theme --><script>
+  const removeClasses = (node) => {
+    const classes = ['light', 'dark']
+    return classes.forEach((className) => node.classList.remove(className))
+  }
 
-  <link rel="stylesheet" href="/raiden.me/assets/404-index-resume.9f8173b2.css" /></head>
-  <body>Page not found</body></html>
+  const adapter = ({
+    storage,
+    serialize = JSON.stringify,
+    deserialize = JSON.parse,
+  }) => {
+    return {
+      get(key) {
+        const value = storageSupport() ? storage.getItem(key) : null
+        const valueExist = value != null
+
+        return valueExist ? deserialize(value) : null
+      },
+      set(key, value) {
+        const storageEstablish = storageSupport()
+
+        if (storageEstablish) {
+          storage.setItem(key, serialize(value))
+        }
+      },
+    }
+  }
+
+  const storageSupport = () => typeof window.localStorage !== 'undefined'
+
+  const storage = adapter({ storage: localStorage })
+
+  const config = {
+    key: 'current-theme',
+    darkMedia: '(prefers-color-scheme: dark)',
+  }
+
+  const saveCurrentTheme = (theme) => {
+    const html = document.querySelector('html')
+
+    if (html) {
+      removeClasses(html)
+      html.classList.add(theme)
+    }
+
+    storage.set(config.key, theme)
+  }
+
+  const extractPreference = () => {
+    const isDark = window.matchMedia(config.darkMedia).matches
+
+    return {
+      theme: isDark ? 'dark' : 'light',
+    }
+  }
+
+  const subscribeTheme = () => {
+    window.matchMedia(config.darkMedia).addListener((evt) => {
+      const theme = evt.matches ? 'dark' : 'light'
+
+      saveCurrentTheme(theme)
+    })
+  }
+
+  const loadCurrentTheme = () => {
+    const preference = extractPreference()
+    const themeFromStorage = storage.get(config.key)
+
+    if (!themeFromStorage) saveCurrentTheme(preference.theme)
+    else saveCurrentTheme(themeFromStorage)
+  }
+
+  if (typeof window !== 'undefined') {
+    subscribeTheme()
+    loadCurrentTheme()
+  }
+</script>
+
+<!-- global meta-data -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="generator" content="Astro v1.2.2">
+
+<!-- primary meta-tags -->
+<title>Not Found | Robert Kuzhin</title>
+<meta name="description" content="The personal site of Robert Kuzhin">
+<meta name="viewport" content="width=device-width">
+
+<!-- scroll-style -->
+
+
+    
+  <link rel="stylesheet" href="/raiden.me/assets/404-resume.dd2c8c84.css" />
+<link rel="stylesheet" href="/raiden.me/assets/404-index-resume.3fab46db.css" />
+<link rel="stylesheet" href="/raiden.me/assets/404.77244682.css" /></head>
+  <body>
+    <section>
+      <div>
+        <h3>404</h3>
+        <h1>Un oh! think you're lost.</h1>
+        <span>It looks like the page you're looking for doesn't exist</span>
+        <a href="/">Go back home</a>
+      </div>
+    </section>
+  </body></html>
