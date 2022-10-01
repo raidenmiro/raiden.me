@@ -1,5 +1,5 @@
 ---
-import Head from '@shared/ui/head.astro'
+import Head from '@shared/ui/base-head.astro'
 import type { MarkdownLayoutProps } from 'astro'
 
 type Props = MarkdownLayoutProps<{
@@ -13,109 +13,25 @@ const { frontmatter } = Astro.props
 <!DOCTYPE html>
 <html lang={frontmatter.lang}>
   <Head title={frontmatter.title} />
-
+  <style is:global>
+    body {
+      @apply bg-white dark:bg-black;
+    }
+    main {
+      margin: 0 auto;
+      max-width: 620px;
+      margin-top: 4ch;
+      margin-bottom: 10ch;
+    }
+    @media (max-width: 654px) {
+      main {
+        @apply px-4;
+      }
+    }
+  </style>
   <body>
     <main class="prose md:prose-lg lg:prose-base dark:prose-invert">
       <slot />
     </main>
-    <script is:inline>
-      const removeClasses = (node) => {
-        const classes = ['light', 'dark']
-        return classes.forEach((className) => node.classList.remove(className))
-      }
-
-      const adapter = ({
-        storage,
-        serialize = JSON.stringify,
-        deserialize = JSON.parse,
-      }) => {
-        return {
-          get(key) {
-            const value = storageSupport() ? storage.getItem(key) : null
-            const valueExist = value != null
-
-            return valueExist ? deserialize(value) : null
-          },
-          set(key, value) {
-            const storageEstablish = storageSupport()
-
-            if (storageEstablish) {
-              storage.setItem(key, serialize(value))
-            }
-          },
-        }
-      }
-
-      const storageSupport = () => typeof window.localStorage !== 'undefined'
-
-      const storage = adapter({ storage: localStorage })
-
-      const config = {
-        key: 'current-theme',
-        darkMedia: '(prefers-color-scheme: dark)',
-      }
-
-      const toggleTheme = () => {
-        const prevTheme = storage.get<Theme>(config.key)
-
-        if (prevTheme) saveCurrentTheme(prevTheme === 'dark' ? 'light' : 'dark')
-      }
-
-      const saveCurrentTheme = (theme) => {
-        const html = document.querySelector('html')
-
-        if (html) {
-          removeClasses(html)
-          html.classList.add(theme)
-        }
-
-        storage.set(config.key, theme)
-      }
-
-      const extractPreference = () => {
-        const isDark = window.matchMedia(config.darkMedia).matches
-
-        return {
-          theme: isDark ? 'dark' : 'light',
-        }
-      }
-
-      const subscribeTheme = () => {
-        window.matchMedia(config.darkMedia).addListener((evt) => {
-          const theme = evt.matches ? 'dark' : 'light'
-
-          saveCurrentTheme(theme)
-        })
-      }
-
-      const loadCurrentTheme = () => {
-        const preference = extractPreference()
-        const themeFromStorage = storage.get(config.key)
-
-        if (!themeFromStorage) saveCurrentTheme(preference.theme)
-        else saveCurrentTheme(themeFromStorage)
-      }
-
-      if (typeof window !== 'undefined') {
-        subscribeTheme()
-        loadCurrentTheme()
-      }
-    </script>
-    <style>
-      body {
-        @apply bg-white dark:bg-black;
-      }
-      main {
-        margin: 0 auto;
-        max-width: 620px;
-        margin-top: 4ch;
-        margin-bottom: 10ch;
-      }
-      @media (max-width: 654px) {
-        main {
-          @apply px-4;
-        }
-      }
-    </style>
   </body>
 </html>
