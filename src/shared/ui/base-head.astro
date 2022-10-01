@@ -1,0 +1,100 @@
+---
+import { websiteMeta } from '@shared/config/meta'
+
+export interface Props {
+  title: string
+  description?: string
+}
+
+const { title, description } = Astro.props
+---
+
+<!-- setup theme -->
+<script is:inline>
+  const removeClasses = (node) => {
+    const classes = ['light', 'dark']
+    return classes.forEach((className) => node.classList.remove(className))
+  }
+
+  const adapter = ({
+    storage,
+    serialize = JSON.stringify,
+    deserialize = JSON.parse,
+  }) => {
+    return {
+      get(key) {
+        const value = storageSupport() ? storage.getItem(key) : null
+        const valueExist = value != null
+
+        return valueExist ? deserialize(value) : null
+      },
+      set(key, value) {
+        const storageEstablish = storageSupport()
+
+        if (storageEstablish) {
+          storage.setItem(key, serialize(value))
+        }
+      },
+    }
+  }
+
+  const storageSupport = () => typeof window.localStorage !== 'undefined'
+
+  const storage = adapter({ storage: localStorage })
+
+  const config = {
+    key: 'current-theme',
+    darkMedia: '(prefers-color-scheme: dark)',
+  }
+
+  const saveCurrentTheme = (theme) => {
+    const html = document.querySelector('html')
+
+    if (html) {
+      removeClasses(html)
+      html.classList.add(theme)
+    }
+
+    storage.set(config.key, theme)
+  }
+
+  const extractPreference = () => {
+    const isDark = window.matchMedia(config.darkMedia).matches
+
+    return {
+      theme: isDark ? 'dark' : 'light',
+    }
+  }
+
+  const subscribeTheme = () => {
+    window.matchMedia(config.darkMedia).addListener((evt) => {
+      const theme = evt.matches ? 'dark' : 'light'
+
+      saveCurrentTheme(theme)
+    })
+  }
+
+  const loadCurrentTheme = () => {
+    const preference = extractPreference()
+    const themeFromStorage = storage.get(config.key)
+
+    if (!themeFromStorage) saveCurrentTheme(preference.theme)
+    else saveCurrentTheme(themeFromStorage)
+  }
+
+  if (typeof window !== 'undefined') {
+    subscribeTheme()
+    loadCurrentTheme()
+  }
+</script>
+
+<!-- global meta-data -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- primary meta-tags -->
+<title>{websiteMeta.title(title)}</title>
+<meta name="description" content={description ?? websiteMeta.description()} />
+<meta name="viewport" content="width=device-width" />

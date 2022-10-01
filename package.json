@@ -1,6 +1,7 @@
 {
-  "name": "mirio-blog",
+  "name": "raiden.me",
   "version": "0.0.1",
+  "license": "MIT",
   "private": true,
   "packageManager": "pnpm@7.11.0",
   "author": "Robert Kuzhin",
@@ -9,7 +10,6 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",

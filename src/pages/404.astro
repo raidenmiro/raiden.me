@@ -1,10 +1,48 @@
 ---
-import Head from '@shared/ui/head.astro'
+import Head from '@shared/ui/base-head.astro'
 ---
 
 <html lang="en">
   <head>
     <Head title="Not Found" />
+    <style is:global>
+      body {
+        @apply dark:bg-black;
+      }
+
+      section {
+        @apply w-full flex justify-center mt-44;
+      }
+
+      div {
+        @apply text-center dark:text-white;
+      }
+
+      h3 {
+        @apply font-bold;
+      }
+
+      h1 {
+        @apply text-6xl font-bold mb-2;
+      }
+
+      span {
+        @apply block mb-5;
+      }
+
+      a {
+        @apply px-5 py-2 bg-slate-200 rounded-md dark:text-black;
+      }
+    </style>
   </head>
-  <body>Page not found</body>
+  <body>
+    <section>
+      <div>
+        <h3>404</h3>
+        <h1>Un oh! think you're lost.</h1>
+        <span>It looks like the page you're looking for doesn't exist</span>
+        <a href="/">Go back home</a>
+      </div>
+    </section>
+  </body>
 </html>
