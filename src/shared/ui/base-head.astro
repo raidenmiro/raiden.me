@@ -98,3 +98,60 @@ const { title, description } = Astro.props
 <title>{websiteMeta.title(title)}</title>
 <meta name="description" content={description ?? websiteMeta.description()} />
 <meta name="viewport" content="width=device-width" />
+
+<!-- scroll-style -->
+<style is:global>
+  &::selection {
+    @apply bg-gray-400;
+  }
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-button {
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply: bg-gray-400;
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-gray-400;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  *::selection {
+    @apply bg-gray-400;
+  }
+
+  *::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-gray-400;
+    border-radius: 100px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+</style>
