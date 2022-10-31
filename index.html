@@ -1,8 +1,141 @@
 <!DOCTYPE html>
-<style>astro-island,astro-slot{display:contents}</style><script>(self.Astro=self.Astro||{}).load=a=>{(async()=>await(await a())())()},window.dispatchEvent(new Event("astro:load"));var l;{const c={0:t=>t,1:t=>JSON.parse(t,o),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(JSON.parse(t,o)),5:t=>new Set(JSON.parse(t,o)),6:t=>BigInt(t),7:t=>new URL(t)},o=(t,i)=>{if(t===""||!Array.isArray(i))return i;const[e,n]=i;return e in c?c[e](n):void 0};customElements.get("astro-island")||customElements.define("astro-island",(l=class extends HTMLElement{constructor(){super(...arguments);this.hydrate=()=>{if(!this.hydrator||this.parentElement&&this.parentElement.closest("astro-island[ssr]"))return;const i=this.querySelectorAll("astro-slot"),e={},n=this.querySelectorAll("template[data-astro-template]");for(const s of n){const r=s.closest(this.tagName);!r||!r.isSameNode(this)||(e[s.getAttribute("data-astro-template")||"default"]=s.innerHTML,s.remove())}for(const s of i){const r=s.closest(this.tagName);!r||!r.isSameNode(this)||(e[s.getAttribute("name")||"default"]=s.innerHTML)}const a=this.hasAttribute("props")?JSON.parse(this.getAttribute("props"),o):{};this.hydrator(this)(this.Component,a,e,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),window.removeEventListener("astro:hydrate",this.hydrate),window.dispatchEvent(new CustomEvent("astro:hydrate"))}}connectedCallback(){!this.hasAttribute("await-children")||this.firstChild?this.childrenConnectedCallback():new MutationObserver((i,e)=>{e.disconnect(),this.childrenConnectedCallback()}).observe(this,{childList:!0})}async childrenConnectedCallback(){window.addEventListener("astro:hydrate",this.hydrate),await import(this.getAttribute("before-hydration-url")),this.start()}start(){const i=JSON.parse(this.getAttribute("opts")),e=this.getAttribute("client");if(Astro[e]===void 0){window.addEventListener(`astro:${e}`,()=>this.start(),{once:!0});return}Astro[e](async()=>{const n=this.getAttribute("renderer-url"),[a,{default:s}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),r=this.getAttribute("component-export")||"default";if(!r.includes("."))this.Component=a[r];else{this.Component=a;for(const d of r.split("."))this.Component=this.Component[d]}return this.hydrator=s,this.hydrate},i,this)}attributeChangedCallback(){this.hydrator&&this.hydrate()}},l.observedAttributes=["props"],l))}</script><astro-island uid="2gBCTc" data-solid-render-id="s0" component-url="/backdrop.2b4583a8.js" component-export="Backdrop" renderer-url="/client.2abe58f3.js" props="{}" ssr="" client="load" before-hydration-url="data:text/javascript;charset=utf-8,//[no before-hydration script]" opts="{&quot;name&quot;:&quot;Backdrop&quot;,&quot;value&quot;:true}" await-children=""><canvas data-hk="s00-0"></canvas></astro-island>
+<!-- setup theme --><script>
+  const removeClasses = (node) => {
+    const classes = ['light', 'dark']
+    return classes.forEach((className) => node.classList.remove(className))
+  }
+
+  const adapter = ({
+    storage,
+    serialize = JSON.stringify,
+    deserialize = JSON.parse,
+  }) => {
+    return {
+      get(key) {
+        const value = storageSupport() ? storage.getItem(key) : null
+        const valueExist = value != null
+
+        return valueExist ? deserialize(value) : null
+      },
+      set(key, value) {
+        const storageEstablish = storageSupport()
+
+        if (storageEstablish) {
+          storage.setItem(key, serialize(value))
+        }
+      },
+    }
+  }
+
+  const storageSupport = () => typeof window.localStorage !== 'undefined'
+
+  const storage = adapter({ storage: localStorage })
+
+  const config = {
+    key: 'current-theme',
+    darkMedia: '(prefers-color-scheme: dark)',
+  }
+
+  const saveCurrentTheme = (theme) => {
+    const html = document.querySelector('html')
+
+    if (html) {
+      removeClasses(html)
+      html.classList.add(theme)
+    }
+
+    storage.set(config.key, theme)
+  }
+
+  const extractPreference = () => {
+    const isDark = window.matchMedia(config.darkMedia).matches
+
+    return {
+      theme: isDark ? 'dark' : 'light',
+    }
+  }
+
+  const subscribeTheme = () => {
+    window.matchMedia(config.darkMedia).addListener((evt) => {
+      const theme = evt.matches ? 'dark' : 'light'
+
+      saveCurrentTheme(theme)
+    })
+  }
+
+  const loadCurrentTheme = () => {
+    const preference = extractPreference()
+    const themeFromStorage = storage.get(config.key)
+
+    if (!themeFromStorage) saveCurrentTheme(preference.theme)
+    else saveCurrentTheme(themeFromStorage)
+  }
+
+  if (typeof window !== 'undefined') {
+    subscribeTheme()
+    loadCurrentTheme()
+  }
+</script>
+
+<!-- global meta-data -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="generator" content="Astro v1.2.2">
+
+<!-- primary meta-tags -->
+<title>Software Engineer | Robert Kuzhin</title>
+<meta name="description" content="The personal site of Robert Kuzhin">
+<meta name="viewport" content="width=device-width">
+
+<!-- scroll-style -->
+
+
+<link rel="stylesheet" href="/raiden.me/assets/404-index-resume.fa10ef9a.css" /><header>
+  <nav class="border-gray-200 px-4 lg:px-6 py-4">
+    <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+      <a href="https://github.com/raidenmiro" class="flex items-center">
+        <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">💫 Robert Kuzhin
+        </span>
+      </a>
+      <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+        <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+          <li>
+                <a href="https://github.com/raidenmiro" target="_blank" rel="noopener" class="block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-1 dark:text-white relative after:content-[&#34;&#34;] after:absolute after:inset-x-0 after:bottom-0 after:m-auto after:h-1 after:w-0 after:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 after:hover:w-full">
+                  Github
+                </a>
+              </li><li>
+                <a href="https://t.me/sumikono" target="_blank" rel="noopener" class="block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-1 dark:text-white relative after:content-[&#34;&#34;] after:absolute after:inset-x-0 after:bottom-0 after:m-auto after:h-1 after:w-0 after:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 after:hover:w-full">
+                  Telegram
+                </a>
+              </li><li>
+                <a href="https://twitter.com/RKuzhin" target="_blank" rel="noopener" class="block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-1 dark:text-white relative after:content-[&#34;&#34;] after:absolute after:inset-x-0 after:bottom-0 after:m-auto after:h-1 after:w-0 after:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 after:hover:w-full">
+                  Twitter
+                </a>
+              </li><li>
+                <a href="mailto:rk.ku.202014@gmail.com" target="_blank" rel="noopener" class="block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-1 dark:text-white relative after:content-[&#34;&#34;] after:absolute after:inset-x-0 after:bottom-0 after:m-auto after:h-1 after:w-0 after:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 after:hover:w-full">
+                  rk.ku.202014@gmail.com
+                </a>
+              </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<style>astro-island,astro-slot{display:contents}</style><script>(self.Astro=self.Astro||{}).load=a=>{(async()=>await(await a())())()},window.dispatchEvent(new Event("astro:load"));var l;{const c={0:t=>t,1:t=>JSON.parse(t,o),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(JSON.parse(t,o)),5:t=>new Set(JSON.parse(t,o)),6:t=>BigInt(t),7:t=>new URL(t)},o=(t,i)=>{if(t===""||!Array.isArray(i))return i;const[e,n]=i;return e in c?c[e](n):void 0};customElements.get("astro-island")||customElements.define("astro-island",(l=class extends HTMLElement{constructor(){super(...arguments);this.hydrate=()=>{if(!this.hydrator||this.parentElement&&this.parentElement.closest("astro-island[ssr]"))return;const i=this.querySelectorAll("astro-slot"),e={},n=this.querySelectorAll("template[data-astro-template]");for(const s of n){const r=s.closest(this.tagName);!r||!r.isSameNode(this)||(e[s.getAttribute("data-astro-template")||"default"]=s.innerHTML,s.remove())}for(const s of i){const r=s.closest(this.tagName);!r||!r.isSameNode(this)||(e[s.getAttribute("name")||"default"]=s.innerHTML)}const a=this.hasAttribute("props")?JSON.parse(this.getAttribute("props"),o):{};this.hydrator(this)(this.Component,a,e,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),window.removeEventListener("astro:hydrate",this.hydrate),window.dispatchEvent(new CustomEvent("astro:hydrate"))}}connectedCallback(){!this.hasAttribute("await-children")||this.firstChild?this.childrenConnectedCallback():new MutationObserver((i,e)=>{e.disconnect(),this.childrenConnectedCallback()}).observe(this,{childList:!0})}async childrenConnectedCallback(){window.addEventListener("astro:hydrate",this.hydrate),await import(this.getAttribute("before-hydration-url")),this.start()}start(){const i=JSON.parse(this.getAttribute("opts")),e=this.getAttribute("client");if(Astro[e]===void 0){window.addEventListener(`astro:${e}`,()=>this.start(),{once:!0});return}Astro[e](async()=>{const n=this.getAttribute("renderer-url"),[a,{default:s}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),r=this.getAttribute("component-export")||"default";if(!r.includes("."))this.Component=a[r];else{this.Component=a;for(const d of r.split("."))this.Component=this.Component[d]}return this.hydrator=s,this.hydrate},i,this)}attributeChangedCallback(){this.hydrator&&this.hydrate()}},l.observedAttributes=["props"],l))}</script><astro-island uid="2gBCTc" data-solid-render-id="s0" component-url="/backdrop.29d7157f.js" component-export="Backdrop" renderer-url="/client.2abe58f3.js" props="{}" ssr="" client="load" before-hydration-url="data:text/javascript;charset=utf-8,//[no before-hydration script]" opts="{&quot;name&quot;:&quot;Backdrop&quot;,&quot;value&quot;:true}" await-children=""><canvas data-hk="s00-0"></canvas></astro-island>
+
 <style>
   body {
     margin: 0;
     padding: 0;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
   }
 </style>
