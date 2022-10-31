@@ -1,11 +1,70 @@
 ---
 import { Backdrop } from '@shared/ui/backdrop'
+import BaseHead from '@shared/ui/base-head.astro'
+
+const user = {
+  name: '💫 Robert Kuzhin',
+  links: [
+    { title: 'Github', href: 'https://github.com/raidenmiro' },
+    { title: 'Telegram', href: 'https://t.me/sumikono' },
+    { title: 'Twitter', href: 'https://twitter.com/RKuzhin' },
+    { title: 'rk.ku.202014@gmail.com', href: 'mailto:rk.ku.202014@gmail.com' },
+  ],
+}
 ---
 
+<BaseHead title="Software Engineer" />
+<header>
+  <nav class="border-gray-200 px-4 lg:px-6 py-4">
+    <div
+      class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+      <a href="https://github.com/raidenmiro" class="flex items-center">
+        <span
+          class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
+          >{user.name}
+        </span>
+      </a>
+      <div
+        class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
+        id="mobile-menu-2">
+        <ul
+          class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+          {
+            user.links.map((source) => (
+              <li>
+                <a
+                  href={source.href}
+                  target="_blank"
+                  rel="noopener"
+                  class:list={{
+                    'block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-1 dark:text-white': true,
+                    'relative after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:m-auto after:h-1 after:w-0': true,
+                    'after:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 after:hover:w-full': true,
+                  }}>
+                  {source.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
 <Backdrop client:load />
+
 <style is:inline>
   body {
     margin: 0;
     padding: 0;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
   }
 </style>

@@ -3,7 +3,7 @@ import { createSignal } from 'solid-js'
 export type Theme = 'dark' | 'light'
 
 const getSavedTheme = () => {
-  if (typeof window.localStorage !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
     return localStorage.getItem('current-theme') as Theme
   }
 
@@ -15,7 +15,7 @@ export const SwitchTheme = () => {
     getSavedTheme() ?? 'dark'
   )
 
-  const domActions = (node: Element, classes = ['light, dark']) => {
+  const domActions = (node: Element, classes = ['light', 'dark']) => {
     const passClassToNode = (className: string) => node.classList.add(className)
     classes.forEach((className) => node.classList.remove(className))
 
@@ -38,7 +38,7 @@ export const SwitchTheme = () => {
 
   const syncWithStorage = (theme: Theme) => {
     if (typeof window.localStorage !== 'undefined') {
-      window.localStorage.setItem('current-theme', theme)
+      window.localStorage.setItem('current-theme', JSON.stringify(theme))
     }
   }
 

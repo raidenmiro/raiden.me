@@ -98,20 +98,29 @@ export const renderSpheres = (config: {
   }
 
   return {
-    run() {
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        container.ticker.add(() => {
-          elements.forEach((sphere) => {
+    run({ dynamic = false }: { dynamic?: boolean }) {
+      const step = () => {
+        elements.forEach((sphere) => {
+          if (dynamic) {
             update(sphere)
-            render(sphere)
-          })
+          }
+          render(sphere)
+        })
+      }
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        requestIdleCallback(() => {
+          container.ticker.add(() => step())
         })
       } else {
-        elements.forEach((sphere) => {
-          update(sphere)
-          render(sphere)
+        requestIdleCallback(() => {
+          step()
         })
       }
     },
   }
+}
+
+export const toColor = (color: string) => {
+  return Number(color.replace('#', '0x000000333'))
 }

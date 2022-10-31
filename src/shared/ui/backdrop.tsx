@@ -3,12 +3,15 @@ import {
   createSphere,
   getBound,
   renderSpheres,
+  toColor,
 } from '@shared/lib/sphere-animations'
+import { storage } from '@shared/lib/storage'
 import { Application } from 'pixi.js'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 
 export const Backdrop = () => {
   const [ref, setRef] = createSignal<HTMLCanvasElement | null>(null)
+  const theme = () => storage.get('current-theme')
 
   onMount(() => {
     const root = ref()
@@ -18,7 +21,7 @@ export const Backdrop = () => {
     const app = new Application({
       view: root,
       resizeTo: window,
-      backgroundAlpha: 0,
+      backgroundColor: toColor(theme() === 'light' ? '#ffffff' : '#000000'),
       resolution: window.devicePixelRatio || 1,
     })
 
@@ -26,7 +29,7 @@ export const Backdrop = () => {
 
     const elements = Array.from({ length: 10 }, () => {
       return createSphere({
-        color: 0x000000333,
+        color: toColor('#CA36B2'),
       })
     })
 
@@ -36,7 +39,7 @@ export const Backdrop = () => {
       elements,
     })
 
-    paint.run()
+    paint.run({ dynamic: false })
 
     onCleanup(() => app.destroy())
   })
