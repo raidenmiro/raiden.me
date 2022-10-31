@@ -1,5 +1,6 @@
 import { KawaseBlurFilter } from '@pixi/filter-kawase-blur'
 import {
+  createPallette,
   createSphere,
   getBound,
   renderSpheres,
@@ -27,9 +28,10 @@ export const Backdrop = () => {
 
     app.stage.filters = [new KawaseBlurFilter(30, 10, true)]
 
+    const pallette = createPallette()
     const elements = Array.from({ length: 10 }, () => {
       return createSphere({
-        color: toColor('#CA36B2'),
+        color: pallette.random(),
       })
     })
 
@@ -39,7 +41,7 @@ export const Backdrop = () => {
       elements,
     })
 
-    paint.run({ dynamic: false })
+    paint.run({ dynamic: true })
 
     onCleanup(() => app.destroy())
   })

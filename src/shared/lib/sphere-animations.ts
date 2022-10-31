@@ -1,3 +1,4 @@
+// https://georgefrancis.dev/writing/create-a-generative-landing-page-and-webgl-powered-background
 import hsl from 'hsl-to-hex'
 import { Application, Graphics } from 'pixi.js'
 import { createNoise2D } from 'simplex-noise'
@@ -28,10 +29,35 @@ export const createSphere = (config: { color: number }) => {
 export type Pallette = ReturnType<typeof createPallette>
 
 export const createPallette = () => {
+  const state = {
+    hue: Math.abs(generate.random(220, 360)),
+    saturation: 95,
+    lightness: 50,
+  }
+
+  const complimentaryHue1 = state.hue + 30
+  const complimentaryHue2 = state.hue + 60
+
+  const baseColor = hsl(state.hue, state.saturation, state.lightness)
+
+  const complimentaryColor1 = hsl(
+    complimentaryHue1,
+    state.saturation,
+    state.lightness
+  )
+  const complimentaryColor2 = hsl(
+    complimentaryHue2,
+    state.saturation,
+    state.lightness
+  )
+
+  const colorChoices = [baseColor, complimentaryColor1, complimentaryColor2]
+
   return {
-    random: () => {},
-    toHex: (color: { hue: number; saturation: number; luminosity: number }) => {
-      return hsl(color.hue, color.saturation, color.luminosity)
+    random: () => {
+      const length = colorChoices.length
+
+      return toColor(colorChoices[Math.floor(Math.random() * length)])
     },
   }
 }
