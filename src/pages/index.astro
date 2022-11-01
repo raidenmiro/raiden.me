@@ -1,6 +1,8 @@
 ---
 import { Backdrop } from '@shared/ui/backdrop'
 import BaseHead from '@shared/ui/base-head.astro'
+import { Button } from '@shared/ui/button'
+import Link from '@shared/ui/link.astro'
 
 const user = {
   name: '💫 Robert Kuzhin',
@@ -14,44 +16,79 @@ const user = {
 ---
 
 <BaseHead title="Software Engineer" />
-<header>
-  <nav class="border-gray-200 px-4 lg:px-6 py-4">
-    <div
-      class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-      <a href="https://github.com/raidenmiro" class="flex items-center">
-        <span
-          class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
-          >{user.name}
-        </span>
-      </a>
+<main>
+  <header>
+    <nav class="border-gray-200 py-4">
       <div
-        class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
-        id="mobile-menu-2">
-        <ul
-          class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-          {
-            user.links.map((source) => (
-              <li>
-                <a
-                  href={source.href}
-                  target="_blank"
-                  rel="noopener"
-                  class:list={{
-                    'block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-1 dark:text-white': true,
-                    'relative after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:m-auto after:h-1 after:w-0': true,
-                    'after:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 after:hover:w-full': true,
-                  }}>
-                  {source.title}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+        class="flex flex-wrap justify-between items-center mx-auto max-w-screen-2xl px-7 lg:px-7">
+        <a href="https://github.com/raidenmiro" class="flex items-center">
+          <span
+            class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
+            >{user.name}
+          </span>
+        </a>
+        <div
+          class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
+          id="mobile-menu-2">
+          <ul
+            class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+            {
+              user.links.map((source) => (
+                <li>
+                  <a
+                    href={source.href}
+                    target="_blank"
+                    rel="noopener"
+                    class:list={{
+                      'block py-2 pr-4 pl-3 text-black rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-1 dark:text-white': true,
+                      'relative after:content-[""] after:absolute after:inset-x-0 after:bottom-0 after:m-auto after:h-1 after:w-0': true,
+                      'after:bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 after:hover:w-full': true,
+                    }}>
+                    {source.title}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <section class="container mx-auto text-dark dark:text-white body-font">
+    <div class="container flex px-5 py-20 md:flex-row flex-col items-center">
+      <div
+        class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left md:mb-0 items-center text-center">
+        <h1
+          class="title-font sm:text-5xl text-4xl mb-4 font-medium text-dark dark:text-white">
+          Software Engineer
+        </h1>
+        <p class="text-lg leading-loose word-break">
+          I love Open Source and tryining to contribute. The last thing I've
+          been main actively follow is <Link
+            label="solid"
+            href="https://effector.dev/"
+            className="mr-1"
+          />
+          <Link label="effector" href="https://effector.dev/" />. Exploring
+          devOps practices. Writing amazing applications. I take great care in
+          the experience, architecture, and code quality of the things I build.
+        </p>
+        <div class="mt-4 flex justify-center">
+          <Button label="Show products" variant="primary" />
+          <Button label="Show articles" variant="secondary" />
+        </div>
+      </div>
+      <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
+        <img
+          class="object-cover object-center rounded"
+          alt="hero"
+          src="https://i.pinimg.com/564x/3b/a7/ea/3ba7ea984e945cfee72754f300bf1a2d.jpg"
+        />
       </div>
     </div>
-  </nav>
-</header>
-<Backdrop client:load />
+  </section>
+  <Backdrop client:idle />
+</main>
 
 <style is:inline>
   body {

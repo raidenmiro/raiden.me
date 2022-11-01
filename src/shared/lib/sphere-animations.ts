@@ -3,15 +3,18 @@ import hsl from 'hsl-to-hex'
 import { Application, Graphics } from 'pixi.js'
 import { createNoise2D } from 'simplex-noise'
 
+import { debounce } from './debounce'
 import { getWindowSize } from './dom'
 import { generate } from './generate'
 
 export type Sphere = ReturnType<typeof createSphere>
 
 export const createSphere = (config: { color: number }) => {
+  const { h } = getWindowSize()
+
   const state = {
     fill: config.color,
-    radius: 300,
+    radius: generate.random(h / 8, h / 3),
     xOff: 0,
     yOff: 0,
     scale: 1,
@@ -64,7 +67,7 @@ export const createPallette = () => {
 
 export type Bound = ReturnType<typeof getBound>
 
-export const getBound = () => {
+export const getBound = () => () => {
   const { w, h } = getWindowSize()
 
   const maxDist = w < 1000 ? w / 3 : w / 5
@@ -91,6 +94,8 @@ export const renderSpheres = (config: {
 }) => {
   const { elements, container, bounds } = config
 
+  let reducedBounds = bounds()
+
   const render = (sphere: Sphere) => {
     sphere.graphics.x = sphere.x
     sphere.graphics.y = sphere.y
@@ -110,8 +115,20 @@ export const renderSpheres = (config: {
     const yNoise = noise2D(sphere.yOff, sphere.yOff)
     const scaleNoise = noise2D(sphere.xOff, sphere.yOff)
 
-    sphere.x = generate.map(xNoise, -1, 1, bounds.x.min, bounds.x.max)
-    sphere.y = generate.map(yNoise, -1, 1, bounds.y.min, bounds.y.max)
+    sphere.x = generate.map(
+      xNoise,
+      -1,
+      1,
+      reducedBounds.x.min,
+      reducedBounds.x.max
+    )
+    sphere.y = generate.map(
+      yNoise,
+      -1,
+      1,
+      reducedBounds.y.min,
+      reducedBounds.y.max
+    )
 
     sphere.scale = generate.map(scaleNoise, -1, 1, 0.5, 1)
 
@@ -121,6 +138,15 @@ export const renderSpheres = (config: {
 
   for (const element of elements) {
     container.stage.addChild(element.graphics)
+  }
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener(
+      'resize',
+      debounce(() => {
+        reducedBounds = bounds()
+      }, 300)
+    )
   }
 
   return {
