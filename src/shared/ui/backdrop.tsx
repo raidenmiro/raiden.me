@@ -1,18 +1,29 @@
+import { theme } from '@features/theme/ui/model'
+import { useStore } from '@nanostores/solid'
 import { KawaseBlurFilter } from '@pixi/filter-kawase-blur'
 import {
   createPallette,
   createSphere,
-  getBound,
   renderSpheres,
   toColor,
 } from '@shared/lib/sphere-animations'
-import { storage } from '@shared/lib/storage'
 import { Application } from 'pixi.js'
 import { createSignal, onCleanup, onMount } from 'solid-js'
 
-export const Backdrop = () => {
+interface Props {
+  dynamic: boolean
+  filter: {
+    blur: number
+    quality: number
+    clamp: boolean
+  }
+  elements?: 'static' | 'random'
+  'client:load': true
+}
+
+export const Backdrop = (props: Props) => {
+  const currentTheme = useStore(theme.store)
   const [ref, setRef] = createSignal<HTMLCanvasElement | null>(null)
-  const theme = () => storage.get('current-theme')
 
   onMount(() => {
     const root = ref()
@@ -22,26 +33,34 @@ export const Backdrop = () => {
     const app = new Application({
       view: root,
       resizeTo: window,
-      backgroundColor: toColor(theme() === 'light' ? '#ffffff' : '#000000'),
+      backgroundColor: toColor(
+        currentTheme() === 'light' ? '#ffffff' : '#000000'
+      ),
       resolution: window.devicePixelRatio || 1,
     })
 
-    app.stage.filters = [new KawaseBlurFilter(30, 10, true)]
+    app.stage.filters = [
+      new KawaseBlurFilter(
+        props.filter.blur,
+        props.filter.quality,
+        props.filter.clamp
+      ),
+    ]
 
     const pallette = createPallette()
     const elements = Array.from({ length: 10 }, () => {
       return createSphere({
         color: pallette.random(),
+        stay: props.elements === 'static',
       })
     })
 
     const paint = renderSpheres({
       container: app,
-      bounds: getBound(),
       elements,
     })
 
-    paint.run({ dynamic: true })
+    paint.run({ dynamic: props.dynamic })
 
     onCleanup(() => app.destroy())
   })

@@ -1,53 +1,9 @@
-import { createSignal } from 'solid-js'
+import { useStore } from '@nanostores/solid'
 
-export type Theme = 'dark' | 'light'
-
-const getSavedTheme = () => {
-  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-    return localStorage.getItem('current-theme') as Theme
-  }
-
-  return null
-}
+import { theme } from './model'
 
 export const SwitchTheme = () => {
-  const [currentTheme, choiceTheme] = createSignal<Theme | null>(
-    getSavedTheme() ?? 'dark'
-  )
-
-  const domActions = (node: Element, classes = ['light', 'dark']) => {
-    const passClassToNode = (className: string) => node.classList.add(className)
-    classes.forEach((className) => node.classList.remove(className))
-
-    return {
-      dark: (theme: Theme) => passClassToNode(theme),
-      light: (theme: Theme) => passClassToNode(theme),
-    }
-  }
-
-  const injectTheme = (theme: Theme) => {
-    const element = document.querySelector('html')
-
-    if (element) {
-      const actions = domActions(element)
-      const variant = actions[theme]
-
-      variant(theme)
-    }
-  }
-
-  const syncWithStorage = (theme: Theme) => {
-    if (typeof window.localStorage !== 'undefined') {
-      window.localStorage.setItem('current-theme', JSON.stringify(theme))
-    }
-  }
-
-  const saveTheme = (theme: Theme) => {
-    injectTheme(theme)
-    syncWithStorage(theme)
-
-    choiceTheme(theme)
-  }
+  const currentTheme = useStore(theme.store)
 
   return (
     <>
@@ -56,10 +12,7 @@ export const SwitchTheme = () => {
         type="checkbox"
         id="themeSwitcher"
         checked={currentTheme() === 'light'}
-        onChange={(evt) => {
-          if (evt.currentTarget.checked) saveTheme('light')
-          else saveTheme('dark')
-        }}
+        onChange={theme.toggle}
       />
       <span></span>
     </>

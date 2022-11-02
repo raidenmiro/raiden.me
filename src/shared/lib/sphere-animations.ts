@@ -3,25 +3,27 @@ import hsl from 'hsl-to-hex'
 import { Application, Graphics } from 'pixi.js'
 import { createNoise2D } from 'simplex-noise'
 
-import { debounce } from './debounce'
 import { getWindowSize } from './dom'
 import { generate } from './generate'
 
 export type Sphere = ReturnType<typeof createSphere>
 
-export const createSphere = (config: { color: number }) => {
+export const createSphere = (config: { color: number; stay?: boolean }) => {
   const { h } = getWindowSize()
+  const { color, stay = false } = config
 
+  const bound = getBound()
   const state = {
-    fill: config.color,
-    radius: generate.random(h / 8, h / 3),
-    xOff: 0,
-    yOff: 0,
+    fill: color,
+    radius: generate.random(h / 6, h / 3),
+    xOff: stay ? 0 : generate.random(0, 1000),
+    yOff: stay ? 0 : generate.random(0, 1000),
     scale: 1,
     inc: 0.002,
-    x: 0,
-    y: 0,
     graphics: new Graphics(),
+    x: stay ? 0 : generate.random(bound.x.min, bound.x.max),
+    y: stay ? 0 : generate.random(bound.y.min, bound.y.max),
+    bound,
   }
 
   state.graphics.alpha = 0.825
@@ -66,8 +68,9 @@ export const createPallette = () => {
 }
 
 export type Bound = ReturnType<typeof getBound>
+export type Position = 'left' | 'right' | 'bottom' | 'top' | 'center'
 
-export const getBound = () => () => {
+export const getBound = () => {
   const { w, h } = getWindowSize()
 
   const maxDist = w < 1000 ? w / 3 : w / 5
@@ -90,11 +93,8 @@ export const getBound = () => () => {
 export const renderSpheres = (config: {
   container: Application
   elements: Sphere[]
-  bounds: Bound
 }) => {
-  const { elements, container, bounds } = config
-
-  let reducedBounds = bounds()
+  const { elements, container } = config
 
   const render = (sphere: Sphere) => {
     sphere.graphics.x = sphere.x
@@ -119,15 +119,15 @@ export const renderSpheres = (config: {
       xNoise,
       -1,
       1,
-      reducedBounds.x.min,
-      reducedBounds.x.max
+      sphere.bound.x.min,
+      sphere.bound.x.max
     )
     sphere.y = generate.map(
       yNoise,
       -1,
       1,
-      reducedBounds.y.min,
-      reducedBounds.y.max
+      sphere.bound.y.min,
+      sphere.bound.y.max
     )
 
     sphere.scale = generate.map(scaleNoise, -1, 1, 0.5, 1)
@@ -138,15 +138,6 @@ export const renderSpheres = (config: {
 
   for (const element of elements) {
     container.stage.addChild(element.graphics)
-  }
-
-  if (typeof window !== 'undefined') {
-    window.addEventListener(
-      'resize',
-      debounce(() => {
-        reducedBounds = bounds()
-      }, 300)
-    )
   }
 
   return {
@@ -161,13 +152,9 @@ export const renderSpheres = (config: {
       }
 
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        requestIdleCallback(() => {
-          container.ticker.add(() => step())
-        })
+        container.ticker.add(() => step())
       } else {
-        requestIdleCallback(() => {
-          step()
-        })
+        step()
       }
     },
   }

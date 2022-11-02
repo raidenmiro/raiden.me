@@ -4,15 +4,20 @@ specifiers:
   '@astrojs/mdx': ^0.11.1
   '@astrojs/solid-js': ^1.1.0
   '@astrojs/tailwind': ^1.0.1
+  '@nanostores/persistent': ^0.7.0
+  '@nanostores/solid': ^0.3.0
   '@pixi/filter-kawase-blur': 4.2.0
   '@tailwindcss/typography': ^0.5.7
   '@types/hsl-to-hex': ^1.0.0
   astro: ^1.2.2
   autoprefixer: ^10.4.10
+  clsx: ^1.2.1
+  dayjs: ^1.11.6
   eslint: ^8.23.1
   eslint-kit: ^6.7.0
   hsl-to-hex: ^1.0.0
   lefthook: ^1.1.1
+  nanostores: ^0.7.0
   pixi.js: ^6.5.8
   postcss: ^8.4.16
   prettier: ^2.7.1
@@ -30,10 +35,14 @@ dependencies:
   '@astrojs/mdx': 0.11.1
   '@astrojs/solid-js': 1.1.0_solid-js@1.5.4
   '@astrojs/tailwind': 1.0.1
+  '@nanostores/persistent': 0.7.0_nanostores@0.7.0
+  '@nanostores/solid': 0.3.0_okhsxaj7ekh3yw6757zs4h7gwm
   '@pixi/filter-kawase-blur': 4.2.0
   astro: 1.2.2
   autoprefixer: 10.4.10_postcss@8.4.16
+  dayjs: 1.11.6
   hsl-to-hex: 1.0.0
+  nanostores: 0.7.0
   pixi.js: 6.5.8
   simplex-noise: 4.0.1
   solid-js: 1.5.4
@@ -41,6 +50,7 @@ dependencies:
 devDependencies:
   '@tailwindcss/typography': 0.5.7_tailwindcss@3.1.8
   '@types/hsl-to-hex': 1.0.0
+  clsx: 1.2.1
   eslint: 8.23.1
   eslint-kit: 6.7.0_irgkl5vooow2ydyo6aokmferha
   lefthook: 1.1.1
@@ -647,6 +657,25 @@ packages:
       vfile: 5.3.5
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@nanostores/persistent/0.7.0_nanostores@0.7.0:
+    resolution: {integrity: sha512-4PAInL/T1hbftZUJ0cmgdFHBMalUoq7BUXFBy7QfyMv/8X3LPTYNh/yxspL7+J+XM3UNvVI7IFRMMs6FBasjhQ==}
+    engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
+    peerDependencies:
+      nanostores: ^0.7.0
+    dependencies:
+      nanostores: 0.7.0
+    dev: false
+
+  /@nanostores/solid/0.3.0_okhsxaj7ekh3yw6757zs4h7gwm:
+    resolution: {integrity: sha512-OE5oKS42lJ+ahHjINgRxI/1Jl76VQy6i8fvAfdYE4UySMFXMEB69Qh8e4L7TObRzxIVl2PeoMacHM10PydBV9w==}
+    peerDependencies:
+      nanostores: ^0.7.0
+      solid-js: '>=1.4.0'
+    dependencies:
+      nanostores: 0.7.0
+      solid-js: 1.5.4
     dev: false
 
   /@next/eslint-plugin-next/12.3.0:
@@ -2077,6 +2106,11 @@ packages:
     engines: {node: '>=0.8'}
     dev: false
 
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: true
+
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -2160,6 +2194,10 @@ packages:
   /data-uri-to-buffer/4.0.0:
     resolution: {integrity: sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==}
     engines: {node: '>= 12'}
+    dev: false
+
+  /dayjs/1.11.6:
+    resolution: {integrity: sha512-zZbY5giJAinCG+7AGaw0wIhNZ6J8AhWuSXKvuc1KAyMiRsvGQWqh4L+MomvhdAYjN+lqvVCMq1I41e3YHvXkyQ==}
     dev: false
 
   /debug/2.6.9:
@@ -4772,6 +4810,11 @@ packages:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /nanostores/0.7.0:
+    resolution: {integrity: sha512-y+ma9MVXuPzXKEXaRYW/iL/xG/HtMwB8fmFcMfUqt5fCNR/na2kDubbZGV4furUMTgmxfySJs0cQjORWhaPDyA==}
+    engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
+    dev: false
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}

@@ -1,8 +1,6 @@
 ---
 import { Backdrop } from '@shared/ui/backdrop'
 import BaseHead from '@shared/ui/base-head.astro'
-import { Button } from '@shared/ui/button'
-import Link from '@shared/ui/link.astro'
 
 const user = {
   name: '💫 Robert Kuzhin',
@@ -12,6 +10,8 @@ const user = {
     { title: 'Twitter', href: 'https://twitter.com/RKuzhin' },
     { title: 'rk.ku.202014@gmail.com', href: 'mailto:rk.ku.202014@gmail.com' },
   ],
+  aboutme: `I love Open Source and tryining to contribute. The last thing I've been main actively follow is solid-js and effector.
+  Exploring devOps practices. Writing amazing applications. I take great care in the experience, architecture, and code quality of the things I build.`,
 }
 ---
 
@@ -55,39 +55,13 @@ const user = {
     </nav>
   </header>
   <section class="container mx-auto text-dark dark:text-white body-font">
-    <div class="container flex px-5 py-20 md:flex-row flex-col items-center">
-      <div
-        class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left md:mb-0 items-center text-center">
-        <h1
-          class="title-font sm:text-5xl text-4xl mb-4 font-medium text-dark dark:text-white">
-          Software Engineer
-        </h1>
-        <p class="text-lg leading-loose word-break">
-          I love Open Source and tryining to contribute. The last thing I've
-          been main actively follow is <Link
-            label="solid"
-            href="https://effector.dev/"
-            className="mr-1"
-          />
-          <Link label="effector" href="https://effector.dev/" />. Exploring
-          devOps practices. Writing amazing applications. I take great care in
-          the experience, architecture, and code quality of the things I build.
-        </p>
-        <div class="mt-4 flex justify-center">
-          <Button label="Show products" variant="primary" />
-          <Button label="Show articles" variant="secondary" />
-        </div>
-      </div>
-      <div class="lg:block lg:max-w-lg hidden lg:w-full md:w-1/2 w-5/6">
-        <img
-          class="object-cover object-center rounded"
-          alt="hero"
-          src="https://i.pinimg.com/564x/3b/a7/ea/3ba7ea984e945cfee72754f300bf1a2d.jpg"
-        />
-      </div>
-    </div>
   </section>
-  <Backdrop client:load />
+  <Backdrop
+    dynamic={true}
+    elements="static"
+    filter={{ blur: 30, quality: 10, clamp: true }}
+    client:load
+  />
 </main>
 
 <style is:inline>
